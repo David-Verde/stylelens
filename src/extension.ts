@@ -1,27 +1,36 @@
 import * as vscode from 'vscode';
 import { StyleLensProvider } from './providers/StyleLensProvider';
+import { SidebarProvider } from './providers/SidebarProvider';
 import { createCssRule } from './utils/styleUtils';
 import { findTargetCssFile, appendToFile } from './utils/fileUtils';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('¡Felicidades, la extensión "stylelens" está activa!');
 
+    const sidebarProvider = new SidebarProvider(context.extensionUri);
+    context.subscriptions.push(
+        vscode.window.registerWebviewViewProvider(SidebarProvider.viewType, sidebarProvider)
+    );
+
     const selector = [
         { language: 'javascriptreact', scheme: 'file' },
-        { language: 'typescriptreact', scheme: 'file' }
+        { language: 'typescriptreact', scheme: 'file' },
+        { language: 'vue', scheme: 'file' },
+        { language: 'svelte', scheme: 'file' } 
     ];
     
     context.subscriptions.push(
         vscode.languages.registerCodeLensProvider(selector, new StyleLensProvider())
     );
 
-    let refactorCommand = vscode.commands.registerCommand('stylelens.refactorStyleAction', async (range: vscode.Range, uri: vscode.Uri) => {
+    let refactorCommand = vscode.commands.registerCommand('stylelens.refactorStyleAction', async (locations: vscode.Range[], uri: vscode.Uri, attributeName: string) => {
         const editor = vscode.window.activeTextEditor;
-        if (!editor || editor.document.uri.toString() !== uri.toString()) {
+        if (!editor || editor.document.uri.toString() !== uri.toString() || locations.length === 0) {
             return;
         }
 
-        const originalClassAttribute = editor.document.getText(range);
+        const firstLocation = locations[0];
+        const originalClassAttribute = editor.document.getText(firstLocation);
         const match = originalClassAttribute.match(/["'](.*?)["']/);
         if (!match || !match[1]) {
             vscode.window.showErrorMessage('No se pudieron extraer las clases.');
@@ -30,11 +39,9 @@ export function activate(context: vscode.ExtensionContext) {
         const utilityClasses = match[1];
 
         const newClassName = await vscode.window.showInputBox({
-            prompt: 'Introduce el nombre para la nueva clase CSS (sin el punto)',
-            placeHolder: 'ej: card-header, primary-button',
-            validateInput: text => {
-                return /^[a-z0-9_-]+$/.test(text) ? null : 'Nombre inválido. Usa solo letras minúsculas, números, guiones y guiones bajos.';
-            }
+            prompt: `Introduce un nombre para la nueva clase que reemplazará ${locations.length} ocurrencias.`,
+            placeHolder: 'ej: card-layout, primary-button',
+            validateInput: text => /^[a-z0-9_-]+$/.test(text) ? null : 'Nombre inválido.',
         });
 
         if (!newClassName) {
@@ -43,7 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
 
         const targetCssFileUri = await findTargetCssFile();
         if (!targetCssFileUri) {
-            vscode.window.showErrorMessage('No se encontró un archivo CSS/SCSS global (ej: global.css, index.css). Por favor, crea uno.');
+            vscode.window.showErrorMessage('No se encontró un archivo CSS/SCSS global.');
             return;
         }
 
@@ -51,11 +58,15 @@ export function activate(context: vscode.ExtensionContext) {
         await appendToFile(targetCssFileUri, cssRule);
 
         const edit = new vscode.WorkspaceEdit();
-        const newAttributeText = `className="${newClassName}"`;
-        edit.replace(uri, range, newAttributeText);
+        const newAttributeText = `${attributeName}="${newClassName}"`;
+
+        for (const location of locations) {
+            edit.replace(uri, location, newAttributeText);
+        }
+        
         await vscode.workspace.applyEdit(edit);
         
-        vscode.window.showInformationMessage(`Clase .${newClassName} creada y aplicada con éxito.`);
+        vscode.window.showInformationMessage(`Clase .${newClassName} creada y aplicada con éxito en ${locations.length} lugares.`);
         
         const doc = await vscode.workspace.openTextDocument(targetCssFileUri);
         await vscode.window.showTextDocument(doc);
