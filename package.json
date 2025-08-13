@@ -4,6 +4,10 @@
   "publisher": "DavidVerde",
   "description": "A smart tool to detect, visualize, and refactor repeated styles.",
   "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/David-Verde/stylelens"
+  },
   "engines": {
     "vscode": "^1.102.0"
   },

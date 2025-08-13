@@ -2,60 +2,59 @@
 
 ![StyleLens Icon](media/icons/stylelens.png)
 
-**StyleLens es una extensión inteligente para VS Code diseñada para ayudarte a detectar, visualizar y refactorizar estilos CSS repetidos o mal estructurados en tus proyectos frontend modernos.**
+**StyleLens** is an intelligent VS Code extension designed to help you detect, visualize, and refactor repeated or poorly structured CSS styles in your modern frontend projects.
 
-Mantén tu base de código de estilos limpia, consistente y mantenible. ¡Di adiós al CSS duplicado y a las largas listas de clases de utilidad!
-
----
-
-### ¿Por Qué StyleLens?
-
-En proyectos grandes que usan frameworks como Tailwind CSS, es fácil terminar con la misma combinación de clases (`flex items-center justify-between...`) repetida en docenas de componentes. Esto lleva a:
--   **Inconsistencia:** Un pequeño cambio requiere editar múltiples archivos.
--   **Mantenimiento Difícil:** ¿Dónde se usa este estilo? ¿Es seguro cambiarlo?
--   **Código Inflado:** Listas de clases largas que dificultan la lectura del marcado.
-
-StyleLens ataca este problema de frente, dándote las herramientas para refactorizar con confianza.
-
-### 🚀 Características Principales
-
--   **Análisis Multi-Framework:** Detecta estilos duplicados en **React (JSX/TSX), Vue, y Svelte(pendiente por crear)**.
--   **Panel de Control Visual:** Obtén una vista global de todos los estilos repetidos en tu proyecto desde una vista dedicada en la barra lateral.
--   **Refactorización con Un Clic:**
-    -   **Desde el Editor:** Sugerencias contextuales (CodeLens) aparecen directamente sobre el código repetido.
-    -   **Desde el Panel:** Refactoriza grupos de estilos duplicados en todo el proyecto con un solo botón.
--   **Extracción Inteligente:** Extrae automáticamente combinaciones de clases de utilidad a una nueva clase reutilizable en tu archivo CSS global (usando `@apply` para Tailwind).
--   **Navegación Rápida:** Haz clic en los resultados del panel para saltar directamente a la línea de código problemática.
-
-### 🎬 Demo
-
-*(Aquí es donde pondrás tu increíble GIF mostrando la extensión en acción)*
-
-### 🛠️ Tecnologías Soportadas
-
--   **Frameworks:** React, Next.js, Vue, Nuxt, Svelte(pendiente por crear), SvelteKit(pendiente por crear), Astro.
--   **Lenguajes:** HTML, JSX, TSX, Vue, Svelte(pendiente por crear).
--   **Estilos:** Clases de utilidad (Tailwind CSS, etc.), clases CSS normales.
-
-### ⚙️ Cómo Usarlo
-
-1.  **Abre el Panel de StyleLens:** Haz clic en el icono de StyleLens en la barra de actividades de VS Code.
-2.  **Analiza tu Proyecto:** Haz clic en el botón "Analizar Workspace".
-3.  **Explora los Resultados:** El panel mostrará una tabla con todos los estilos duplicados, el número de apariciones y los archivos/líneas donde se encuentran.
-4.  **Refactoriza:**
-    -   Haz clic en el botón "Refactorizar" en el panel para arreglar un grupo de duplicados en todo el proyecto.
-    -   O trabaja directamente en el editor, donde verás sugerencias sobre el código.
-
-### 🗺️ Roadmap Futuro (v2.0 y más allá)
-
-StyleLens está en desarrollo activo. Algunas de las características planeadas incluyen:
--   **Detección de Similitud:** Sugerir la unificación de estilos que son *casi* idénticos (ej. `p-4` vs `p-5`).
--   **Soporte para CSS-in-JS:** Analizar patrones en `styled-components` y `Emotion`.
--   **Sugerencias de Design Tokens:** Detectar valores brutos (`margin: 16px`) y sugerir la creación de tokens de diseño (`spacing-md`).
--   **Mapa Visual (Heatmap):** Un diagrama que muestre visualmente qué componentes comparten más estilos.
--   **Configuración Avanzada:** Permitir ignorar archivos, carpetas o clases específicas.
+Keep your style codebase clean, consistent, and maintainable. Say goodbye to duplicate CSS and long utility class lists!
 
 ---
 
-Hecho con ❤️ por [Tu David Verde].
+## Why StyleLens?
 
+In large projects using frameworks like Tailwind CSS, it's easy to end up with the same class combinations (`flex items-center justify-between...`) repeated across dozens of components. This leads to:
+- **Inconsistency**: A small change requires editing multiple files
+- **Maintenance headaches**: Where is this style used? Is it safe to change?
+- **Code bloat**: Long class lists that make markup harder to read
+
+StyleLens tackles this problem head-on, giving you the tools to refactor with confidence.
+
+## 🚀 Key Features
+
+- **Multi-Framework Analysis**: Detects duplicate styles in **React (JSX/TSX), Vue, and Svelte (coming soon)**
+- **Visual Dashboard**: Get a global view of all repeated styles in your project from a dedicated sidebar
+- **One-Click Refactoring**:
+  - **In-editor**: Contextual suggestions (CodeLens) appear directly on repeated code
+  - **From panel**: Refactor groups of duplicate styles across your entire project with a single button
+- **Smart Extraction**: Automatically extract utility class combinations into new reusable CSS classes (using `@apply` for Tailwind)
+- **Quick Navigation**: Click results in the panel to jump directly to problematic code
+
+## 🎬 Demo
+
+![StyleLens Demo](media/icons/stylelens.gif)
+
+## 🛠️ Supported Technologies
+
+- **Frameworks**: React, Next.js, Vue, Nuxt, Svelte (coming soon), SvelteKit (coming soon), Astro
+- **Languages**: HTML, JSX, TSX, Vue, Svelte (coming soon)
+- **Styles**: Utility classes (Tailwind CSS, etc.), regular CSS classes
+
+## ⚙️ How to Use
+
+1. **Open StyleLens Panel**: Click the StyleLens icon in VS Code's activity bar
+2. **Analyze Your Project**: Click "Analyze Workspace" button
+3. **Explore Results**: The panel will show a table of all duplicate styles, their occurrence count, and file locations
+4. **Refactor**:
+   - Click "Refactor" in the panel to fix a group of duplicates project-wide
+   - Or work directly in the editor with inline suggestions
+
+## 🗺️ Future Roadmap (v2.0+)
+
+StyleLens is under active development. Planned features include:
+- **Similarity Detection**: Suggest merging styles that are nearly identical (e.g., `p-4` vs `p-5`)
+- **CSS-in-JS Support**: Analyze patterns in `styled-components` and `Emotion`
+- **Design Token Suggestions**: Detect raw values (`margin: 16px`) and suggest creating design tokens (`spacing-md`)
+- **Visual Heatmap**: Diagram showing which components share the most styles
+- **Advanced Configuration**: Allow ignoring specific files, folders, or classes
+
+---
+
+Made with ❤️ by [David Verde]
