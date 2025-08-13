@@ -3,30 +3,28 @@ import { findDuplicateClasses as findDuplicateClassesInJsx, StyleUsage } from '.
 import { findDuplicateClassesInVue } from './vueParser';
 import { findDuplicateClassesInSvelte } from './svelteParser';
 
-
-export interface GroupedDuplicate {
+export interface DetailedDuplicate {
     classString: string;
     count: number;
-    files: string[]; 
+    locations: {
+        filePath: string;
+        lines: number[];
+    }[];
 }
 
-
-export async function analyzeWorkspace(): Promise<GroupedDuplicate[]> {
-
+export async function analyzeWorkspace(): Promise<DetailedDuplicate[]> {
     const files = await vscode.workspace.findFiles(
-        '**/*.{jsx,tsx,vue,svelte}', 
-        '**/node_modules/**'        
+        '**/*.{jsx,tsx,vue,svelte}',
+        '**/node_modules/**'
     );
 
-    const allUsages: (StyleUsage & { filePath: string })[] = [];
-
+    const usagesByClass = new Map<string, (StyleUsage & { filePath: string })[]>();
 
     for (const file of files) {
         const document = await vscode.workspace.openTextDocument(file);
-        const languageId = document.languageId;
         let usages: StyleUsage[] = [];
 
-        switch (languageId) {
+        switch (document.languageId) {
             case 'javascriptreact':
             case 'typescriptreact':
                 usages = findDuplicateClassesInJsx(document.getText());
@@ -35,36 +33,46 @@ export async function analyzeWorkspace(): Promise<GroupedDuplicate[]> {
                 usages = findDuplicateClassesInVue(document.getText());
                 break;
             case 'svelte':
-                usages = findDuplicateClassesInSvelte(document);
+                usages = await findDuplicateClassesInSvelte(document);
                 break;
         }
 
-   
-        const usagesWithFile = usages.map(u => ({ ...u, filePath: vscode.workspace.asRelativePath(file) }));
-        allUsages.push(...usagesWithFile);
-    }
-
-
-    const grouped = new Map<string, { count: number; files: Set<string> }>();
-    for (const usage of allUsages) {
-        if (!grouped.has(usage.classString)) {
-            grouped.set(usage.classString, { count: 0, files: new Set() });
+        if (usages.length > 0) {
+            const relativePath = vscode.workspace.asRelativePath(file);
+            const usagesWithFile = usages.map(u => ({ ...u, filePath: relativePath }));
+            
+            for(const usage of usagesWithFile) {
+                if (!usagesByClass.has(usage.classString)) {
+                    usagesByClass.set(usage.classString, []);
+                }
+                usagesByClass.get(usage.classString)!.push(usage);
+            }
         }
-        const entry = grouped.get(usage.classString)!;
-        entry.count++;
-        entry.files.add(usage.filePath);
     }
 
-   
-    const results: GroupedDuplicate[] = [];
-    grouped.forEach((value, key) => {
-        results.push({
-            classString: key,
-            count: value.count,
-            files: Array.from(value.files)
-        });
-    });
+    const results: DetailedDuplicate[] = [];
+    
+    usagesByClass.forEach((locations, classString) => {
+        if (locations.length > 1) {
+            const locationsByFile = new Map<string, number[]>();
+            
+            for (const loc of locations) {
+                if (!locationsByFile.has(loc.filePath)) {
+                    locationsByFile.set(loc.filePath, []);
+                }
+                locationsByFile.get(loc.filePath)!.push(loc.location.start.line + 1);
+            }
 
+            results.push({
+                classString: classString,
+                count: locations.length,
+                locations: Array.from(locationsByFile.entries()).map(([filePath, lines]) => ({
+                    filePath,
+                    lines: lines.sort((a, b) => a - b)
+                }))
+            });
+        }
+    });
 
     return results.sort((a, b) => b.count - a.count);
 }

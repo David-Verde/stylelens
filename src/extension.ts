@@ -23,6 +23,37 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.languages.registerCodeLensProvider(selector, new StyleLensProvider())
     );
 
+    const globalRefactorCommand = vscode.commands.registerCommand(
+        'stylelens.executeGlobalRefactor',
+        async (utilityClasses: string, newClassName: string, locationsToUpdate: { filePath: string; range: vscode.Range; attributeName: string }[]) => {
+            
+            const targetCssFileUri = await findTargetCssFile();
+            if (!targetCssFileUri) {
+                vscode.window.showErrorMessage('No se encontró un archivo CSS/SCSS global (ej: global.css, index.css).');
+                return;
+            }
+
+            const cssRule = createCssRule(newClassName, utilityClasses);
+            await appendToFile(targetCssFileUri, cssRule);
+
+            const edit = new vscode.WorkspaceEdit();
+
+            for (const loc of locationsToUpdate) {
+                const fileUri = vscode.Uri.joinPath(vscode.workspace.workspaceFolders![0].uri, loc.filePath);
+                const newAttributeText = `${loc.attributeName}="${newClassName}"`;
+                edit.replace(fileUri, loc.range, newAttributeText);
+            }
+
+            await vscode.workspace.applyEdit(edit);
+
+            vscode.window.showInformationMessage(`Clase .${newClassName} creada y aplicada con éxito en ${locationsToUpdate.length} lugares.`);
+            
+            const doc = await vscode.workspace.openTextDocument(targetCssFileUri);
+            await vscode.window.showTextDocument(doc);
+        }
+    );
+    context.subscriptions.push(globalRefactorCommand);
+
     let refactorCommand = vscode.commands.registerCommand('stylelens.refactorStyleAction', async (locations: vscode.Range[], uri: vscode.Uri, attributeName: string) => {
         const editor = vscode.window.activeTextEditor;
         if (!editor || editor.document.uri.toString() !== uri.toString() || locations.length === 0) {
@@ -32,10 +63,7 @@ export function activate(context: vscode.ExtensionContext) {
         const firstLocation = locations[0];
         const originalClassAttribute = editor.document.getText(firstLocation);
         const match = originalClassAttribute.match(/["'](.*?)["']/);
-        if (!match || !match[1]) {
-            vscode.window.showErrorMessage('No se pudieron extraer las clases.');
-            return;
-        }
+        if (!match || !match[1]) return;
         const utilityClasses = match[1];
 
         const newClassName = await vscode.window.showInputBox({
@@ -44,34 +72,16 @@ export function activate(context: vscode.ExtensionContext) {
             validateInput: text => /^[a-z0-9_-]+$/.test(text) ? null : 'Nombre inválido.',
         });
 
-        if (!newClassName) {
-            return;
-        }
+        if (!newClassName) return;
 
-        const targetCssFileUri = await findTargetCssFile();
-        if (!targetCssFileUri) {
-            vscode.window.showErrorMessage('No se encontró un archivo CSS/SCSS global.');
-            return;
-        }
+        const locationsToUpdate = locations.map(range => ({
+            filePath: vscode.workspace.asRelativePath(uri),
+            range: range,
+            attributeName: attributeName
+        }));
 
-        const cssRule = createCssRule(newClassName, utilityClasses);
-        await appendToFile(targetCssFileUri, cssRule);
-
-        const edit = new vscode.WorkspaceEdit();
-        const newAttributeText = `${attributeName}="${newClassName}"`;
-
-        for (const location of locations) {
-            edit.replace(uri, location, newAttributeText);
-        }
-        
-        await vscode.workspace.applyEdit(edit);
-        
-        vscode.window.showInformationMessage(`Clase .${newClassName} creada y aplicada con éxito en ${locations.length} lugares.`);
-        
-        const doc = await vscode.workspace.openTextDocument(targetCssFileUri);
-        await vscode.window.showTextDocument(doc);
+        vscode.commands.executeCommand('stylelens.executeGlobalRefactor', utilityClasses, newClassName, locationsToUpdate);
     });
-    
     context.subscriptions.push(refactorCommand);
 
     let analyzeCommand = vscode.commands.registerCommand('stylelens.analyzeWorkspaceStyles', () => {

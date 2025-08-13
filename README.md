@@ -1,71 +1,61 @@
-# stylelens README
+# StyleLens ✨ – Smart Visual Refactor
 
-This is the README for your extension "stylelens". After writing up a brief description, we recommend including the following sections.
+![StyleLens Icon](media/icons/stylelens.png)
 
-## Features
+**StyleLens es una extensión inteligente para VS Code diseñada para ayudarte a detectar, visualizar y refactorizar estilos CSS repetidos o mal estructurados en tus proyectos frontend modernos.**
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
-
-## Requirements
-
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
-
-## Extension Settings
-
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
-
-## Known Issues
-
-Calling out known issues can help limit users opening duplicate issues against your extension.
-
-## Release Notes
-
-Users appreciate release notes as you update your extension.
-
-### 1.0.0
-
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
+Mantén tu base de código de estilos limpia, consistente y mantenible. ¡Di adiós al CSS duplicado y a las largas listas de clases de utilidad!
 
 ---
 
-## Following extension guidelines
+### ¿Por Qué StyleLens?
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+En proyectos grandes que usan frameworks como Tailwind CSS, es fácil terminar con la misma combinación de clases (`flex items-center justify-between...`) repetida en docenas de componentes. Esto lleva a:
+-   **Inconsistencia:** Un pequeño cambio requiere editar múltiples archivos.
+-   **Mantenimiento Difícil:** ¿Dónde se usa este estilo? ¿Es seguro cambiarlo?
+-   **Código Inflado:** Listas de clases largas que dificultan la lectura del marcado.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+StyleLens ataca este problema de frente, dándote las herramientas para refactorizar con confianza.
 
-## Working with Markdown
+### 🚀 Características Principales
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+-   **Análisis Multi-Framework:** Detecta estilos duplicados en **React (JSX/TSX), Vue, y Svelte(pendiente por crear)**.
+-   **Panel de Control Visual:** Obtén una vista global de todos los estilos repetidos en tu proyecto desde una vista dedicada en la barra lateral.
+-   **Refactorización con Un Clic:**
+    -   **Desde el Editor:** Sugerencias contextuales (CodeLens) aparecen directamente sobre el código repetido.
+    -   **Desde el Panel:** Refactoriza grupos de estilos duplicados en todo el proyecto con un solo botón.
+-   **Extracción Inteligente:** Extrae automáticamente combinaciones de clases de utilidad a una nueva clase reutilizable en tu archivo CSS global (usando `@apply` para Tailwind).
+-   **Navegación Rápida:** Haz clic en los resultados del panel para saltar directamente a la línea de código problemática.
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+### 🎬 Demo
 
-## For more information
+*(Aquí es donde pondrás tu increíble GIF mostrando la extensión en acción)*
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
+### 🛠️ Tecnologías Soportadas
 
-**Enjoy!**
+-   **Frameworks:** React, Next.js, Vue, Nuxt, Svelte(pendiente por crear), SvelteKit(pendiente por crear), Astro.
+-   **Lenguajes:** HTML, JSX, TSX, Vue, Svelte(pendiente por crear).
+-   **Estilos:** Clases de utilidad (Tailwind CSS, etc.), clases CSS normales.
+
+### ⚙️ Cómo Usarlo
+
+1.  **Abre el Panel de StyleLens:** Haz clic en el icono de StyleLens en la barra de actividades de VS Code.
+2.  **Analiza tu Proyecto:** Haz clic en el botón "Analizar Workspace".
+3.  **Explora los Resultados:** El panel mostrará una tabla con todos los estilos duplicados, el número de apariciones y los archivos/líneas donde se encuentran.
+4.  **Refactoriza:**
+    -   Haz clic en el botón "Refactorizar" en el panel para arreglar un grupo de duplicados en todo el proyecto.
+    -   O trabaja directamente en el editor, donde verás sugerencias sobre el código.
+
+### 🗺️ Roadmap Futuro (v2.0 y más allá)
+
+StyleLens está en desarrollo activo. Algunas de las características planeadas incluyen:
+-   **Detección de Similitud:** Sugerir la unificación de estilos que son *casi* idénticos (ej. `p-4` vs `p-5`).
+-   **Soporte para CSS-in-JS:** Analizar patrones en `styled-components` y `Emotion`.
+-   **Sugerencias de Design Tokens:** Detectar valores brutos (`margin: 16px`) y sugerir la creación de tokens de diseño (`spacing-md`).
+-   **Mapa Visual (Heatmap):** Un diagrama que muestre visualmente qué componentes comparten más estilos.
+-   **Configuración Avanzada:** Permitir ignorar archivos, carpetas o clases específicas.
+
+---
+
+Hecho con ❤️ por [Tu David Verde].
+
