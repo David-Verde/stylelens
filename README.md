@@ -1,6 +1,6 @@
 # StyleLens ✨ – Smart Visual Refactor
 👉 [Download Here](https://marketplace.visualstudio.com/items?itemName=DavidVerde.stylelens) 
-![StyleLens Icon](media/icons/stylelens.png)
+![StyleLens Logo](media/icons/stylelens.png){: width="200px"}
 
 **StyleLens** is an intelligent VS Code extension designed to help you detect, visualize, and refactor repeated or poorly structured CSS styles in your modern frontend projects.
 
