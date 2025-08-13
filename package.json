@@ -1,6 +1,7 @@
 {
   "name": "stylelens",
   "displayName": "StyleLens",
+  "publisher": "DavidVerde",
   "description": "A smart tool to detect, visualize, and refactor repeated styles.",
   "version": "0.0.1",
   "engines": {
@@ -17,7 +18,25 @@
         "command": "stylelens.analyzeWorkspaceStyles",
         "title": "StyleLens: Analizar Estilos Repetidos en el Workspace"
       }
-    ]
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "stylelens-sidebar",
+          "title": "StyleLens",
+          "icon": "media/icons/stylelens.png"
+        }
+      ]
+    },
+    "views": {
+      "stylelens-sidebar": [
+        {
+          "id": "stylelens.mainView",
+          "name": "Análisis de Estilos",
+          "type": "webview"
+        }
+      ]
+    }
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -45,6 +64,9 @@
   },
   "dependencies": {
     "@babel/parser": "^7.28.0",
-    "@babel/traverse": "^7.28.0"
+    "@babel/traverse": "^7.28.0",
+    "@vue/compiler-sfc": "^3.5.18",
+    "estree-walker": "^2.0.2",
+    "svelte": "^3.59.2"
   }
 }

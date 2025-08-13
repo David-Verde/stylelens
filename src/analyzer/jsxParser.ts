@@ -9,7 +9,7 @@ export interface StyleUsage {
 }
 
 
-function normalizeClassString(classString: string): string {
+export function normalizeClassString(classString: string): string {
     return classString.trim().split(/\s+/).sort().join(' ');
 }
 
