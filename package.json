@@ -3,7 +3,7 @@
   "displayName": "StyleLens",
   "publisher": "DavidVerde",
   "description": "A smart tool to detect, visualize, and refactor repeated styles.",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/David-Verde/stylelens"
