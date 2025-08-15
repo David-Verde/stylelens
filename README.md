@@ -51,7 +51,7 @@ StyleLens solves these problems by providing a centralized dashboard and actiona
 
 ### 🎬 Demo
 
-*(Coming soon! Replace this with an updated GIF showing the new features)*
+![StyleLens Demo](media/icons/stylelens.gif)
 
 ### 🛠️ Supported Technologies
 
