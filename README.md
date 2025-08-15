@@ -1,7 +1,8 @@
-# StyleLens ✨ – Your Intelligent CSS Refactoring Co-pilot
 
-![StyleLens Logo](https://raw.githubusercontent.com/DavidVerde/StyleLens/main/media/icons/stylelens.png) 
-<!-- Note: Update the image URL to your public repository URL once available -->
+# <img src="media/icons/stylelens.png" alt="StyleLens" width="250" height="250" style="max-width: 250px; height: auto; display: block; margin: 0 auto;"/>
+
+👉 [Download Here](https://marketplace.visualstudio.com/items?itemName=DavidVerde.stylelens) 
+
 
 **StyleLens is a powerful VS Code extension that acts as a co-pilot for your styles. It scans your entire frontend project to detect, visualize, and refactor duplicated, dead, or inline styles, helping you write cleaner, more consistent, and highly maintainable CSS.**
 
@@ -54,10 +55,20 @@ StyleLens solves these problems by providing a centralized dashboard and actiona
 
 ### 🛠️ Supported Technologies
 
+
 -   **Frameworks:** React, Next.js, Vue, Nuxt, Astro.
 -   **Languages:** HTML, JSX, TSX, Vue.
 -   **Styles:** Utility classes (Tailwind CSS, etc.), Custom CSS classes, and Inline Styles.
 -   **Coming Soon:** Full Svelte support, SCSS analysis, and CSS-in-JS patterns.
+
+## Installation
+1. Open VS Code
+2. Go to Extensions view (Ctrl+Shift+X)
+3. Search for "StyleLens"
+4. Click Install
+
+## ⚙️ How to Use
+
 
 ### ⚙️ How to Use
 
@@ -81,6 +92,7 @@ StyleLens solves these problems by providing a centralized dashboard and actiona
 
 ---
 
+
 Made with ❤️ by 👤 **David Verde Alvarez**
 
 - This is My **GitHub**: [![@David-Verde](https://img.shields.io/github/followers/omarramoun?label=David&style=social)](https://github.com/David-Verde)
@@ -88,3 +100,4 @@ Made with ❤️ by 👤 **David Verde Alvarez**
 - This is My **Twitter**: [![@Unyielding1](https://img.shields.io/twitter/follow/omarramoun?label=David16&style=social)](https://twitter.com/UnyieldingOne)
 
 - This is My **LinkedIn**: [![@David-Verde](https://img.shields.io/badge/David_Verde-0077B5?style=social&logo=linkedin&labelColor=0077B5)](https://www.linkedin.com/in/david-verde-alvarez/)
+

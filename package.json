@@ -2,8 +2,11 @@
   "name": "stylelens",
   "displayName": "StyleLens",
   "publisher": "DavidVerde",
+  "icon": "media/icons/stylelens.png",
   "description": "A smart tool to detect, visualize, and refactor repeated styles.",
+
   "version": "1.0.0",
+
   "repository": {
     "type": "git",
     "url": "https://github.com/David-Verde/stylelens"
