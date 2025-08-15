@@ -99,5 +99,5 @@ Made with ❤️ by 👤 **David Verde Alvarez**
 
 - This is My **Twitter**: [![@Unyielding1](https://img.shields.io/twitter/follow/omarramoun?label=David16&style=social)](https://twitter.com/UnyieldingOne)
 
-- This is My **LinkedIn**: [![@David-Verde](https://img.shields.io/badge/David_Verde-0077B5?style=social&logo=linkedin&labelColor=0077B5)](https://www.linkedin.com/in/david-verde-alvarez/)
+- This is My **LinkedIn**: [![David-Verde](https://img.shields.io/badge/David_Verde_Alvarez-0077B5?style=social&logo=linkedin)](https://www.linkedin.com/in/david-verde-alvarez/)
 
