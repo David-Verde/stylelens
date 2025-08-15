@@ -1,5 +1,5 @@
 
-# <img src="media/icons/stylelens.png" alt="StyleLens" width="250" height="250" style="max-width: 250px; height: auto; display: block; margin: 0 auto;"/>
+![StyleLens Logo](https://raw.githubusercontent.com/David-Verde/stylelens/master/media/icons/stylelens.png)
 
 👉 [Download Here](https://marketplace.visualstudio.com/items?itemName=DavidVerde.stylelens) 
 
