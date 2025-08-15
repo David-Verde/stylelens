@@ -3,9 +3,15 @@ import { StyleLensProvider } from './providers/StyleLensProvider';
 import { SidebarProvider } from './providers/SidebarProvider';
 import { createCssRule } from './utils/styleUtils';
 import { findTargetCssFile, appendToFile } from './utils/fileUtils';
+import { initializeUtilityClassSet } from './analyzer/workspaceAnalyzer';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('¡Felicidades, la extensión "stylelens" está activa!');
+
+    // --- ¡CAMBIO CLAVE! ---
+    // Inicializamos el set de clases de utilidad al activar la extensión,
+    // pasándole el contexto para que pueda encontrar la ruta del archivo.
+    initializeUtilityClassSet(context);
 
     const sidebarProvider = new SidebarProvider(context.extensionUri);
     context.subscriptions.push(

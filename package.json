@@ -4,7 +4,9 @@
   "publisher": "DavidVerde",
   "icon": "media/icons/stylelens.png",
   "description": "A smart tool to detect, visualize, and refactor repeated styles.",
-  "version": "0.1.0",
+
+  "version": "1.0.0",
+
   "repository": {
     "type": "git",
     "url": "https://github.com/David-Verde/stylelens"
@@ -45,12 +47,12 @@
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
+    "compile": "tsc -p ./ && npm run copy-resources",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src",
-    "test": "vscode-test",
-    "format": "prettier --write \"src/**/*.ts\""
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "copy-resources": "cpr src/resources out/resources -o"
   },
   "devDependencies": {
     "@types/babel__parser": "^7.0.0",
@@ -62,6 +64,7 @@
     "@typescript-eslint/parser": "^8.25.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
+    "cpr": "^3.0.1",
     "eslint": "^9.21.0",
     "eslint-config-prettier": "^10.1.8",
     "prettier": "^3.6.2",

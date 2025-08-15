@@ -24,7 +24,7 @@ export class StyleLensProvider implements vscode.CodeLensProvider {
         let duplicateStyles: StyleUsage[] = [];
 
         if (document.languageId === 'svelte') {
-              duplicateStyles = await findDuplicateClassesInSvelte(document); 
+              duplicateStyles = findDuplicateClassesInSvelte(document); 
         } else if (document.languageId === 'vue') {
             duplicateStyles = findDuplicateClassesInVue(document.getText());
         } else if (document.languageId === 'javascriptreact' || document.languageId === 'typescriptreact') {
