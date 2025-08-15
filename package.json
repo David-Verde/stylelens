@@ -5,7 +5,7 @@
   "icon": "media/icons/stylelens.png",
   "description": "A smart tool to detect, visualize, and refactor repeated styles.",
 
-  "version": "1.0.0",
+  "version": "1.0.1",
 
   "repository": {
     "type": "git",
