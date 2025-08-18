@@ -4,9 +4,7 @@
   "publisher": "DavidVerde",
   "icon": "media/icons/stylelens.png",
   "description": "A smart tool to detect, visualize, and refactor repeated styles.",
-
-  "version": "1.0.2",
-
+  "version": "1.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/David-Verde/stylelens"
@@ -23,7 +21,7 @@
     "commands": [
       {
         "command": "stylelens.analyzeWorkspaceStyles",
-        "title": "StyleLens: Analizar Estilos Repetidos en el Workspace"
+           "title": "%stylelens.command.analyze%" 
       }
     ],
     "viewsContainers": {
@@ -39,21 +37,21 @@
       "stylelens-sidebar": [
         {
           "id": "stylelens.mainView",
-          "name": "Análisis de Estilos",
+           "name": "%stylelens.view.name%",
           "type": "webview"
         }
       ]
     }
   },
-  "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./ && npm run copy-resources",
-    "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
-    "test": "node ./out/test/runTest.js",
-    "copy-resources": "cpr src/resources out/resources -o"
-  },
+ "scripts": {
+  "vscode:prepublish": "npm run compile",
+  "compile": "tsc -p ./ && npm run copy-resources",
+  "watch": "tsc -watch -p ./",
+  "pretest": "npm run compile && npm run lint",
+  "lint": "eslint src --ext ts",
+  "test": "node ./out/test/runTest.js",
+"copy-resources": "cpr src/resources out/resources -o && cpr media out/media -o"
+},
   "devDependencies": {
     "@types/babel__parser": "^7.0.0",
     "@types/babel__traverse": "^7.20.7",
@@ -73,6 +71,7 @@
   "dependencies": {
     "@babel/parser": "^7.28.0",
     "@babel/traverse": "^7.28.0",
+    "@vscode/codicons": "^0.0.39",
     "@vue/compiler-sfc": "^3.5.18",
     "estree-walker": "^2.0.2",
     "svelte": "^3.59.2"

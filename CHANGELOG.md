@@ -1,24 +1,20 @@
 # StyleLens Changelog
 
-## [1.0.0] - 2023-08-15
+## [1.1.0] - 2024-05-21
 
 ### ✨ Added (Nuevas Funcionalidades)
 
--   **Complete Workspace Analysis:** StyleLens now analyzes the entire project and finds duplicates across all supported files (React, Vue, etc.).
--   **Inline Style Detection:** Now detects and helps refactor duplicated inline `style` attributes.
--   **Dead Class Detection:** A new panel section that shows custom CSS classes used in your components but not defined in any stylesheet.
--   **Smart Style Creation:**
-    -   New "Create Styles" button for undefined classes.
-    -   Option to create an empty CSS rule manually.
-    -   Option to use pre-built templates for common UI patterns like Cards, Buttons, and Inputs.
--   **Framework-Agnostic Templates:** Templates are now available in both **Tailwind CSS (`@apply`)** and **Pure CSS** formats.
+-   **Intelligent Dashboard UI:** The main panel has been completely redesigned into a modern, intuitive dashboard.
+-   **Class Heat Section:** A new "Class Heat" section that provides an at-a-glance heatmap of the most frequently used CSS classes in your project.
+-   **Severity Levels:** Duplicates and class usage are now categorized with severity levels (e.g., Critical, Warning, Minor) for easier prioritization.
 
-### 🚀 Changed 
+### 🚀 Changed
 
--   The analysis engine is now significantly more robust and accurate.
--   Improved filtering of Tailwind CSS utility classes to dramatically reduce noise in the "Undefined Classes" panel.
--   The UI now supports multiple sections for different types of style issues.
+-   **Complete UI/UX Overhaul:** The user experience is now driven by a high-level summary dashboard, with a link to the full detailed report.
+-   **Color-Coded Tags:** Issues are now presented with color-coded tags (orange for critical, yellow for warning, green for informational) to quickly assess project health.
+-   **Visual Icons:** The entire UI now uses icons to provide clear, immediate visual context for each section and finding.
 
-### 🐞 Fixed 
+### 🐞 Fixed
 
--   Resolved various issues related to data transfer between the extension and the webview panel.
+-   Corrected asset path resolution for Webview resources, ensuring icons and other media now load correctly.
+-   Improved the reliability of the build process for copying all necessary static assets.
