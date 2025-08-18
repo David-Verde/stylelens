@@ -4,13 +4,10 @@ import { SidebarProvider } from './providers/SidebarProvider';
 import { createCssRule } from './utils/styleUtils';
 import { findTargetCssFile, appendToFile } from './utils/fileUtils';
 import { initializeUtilityClassSet } from './analyzer/workspaceAnalyzer';
+import { initialize as initializeI18n, t } from './i18n';
 
 export function activate(context: vscode.ExtensionContext) {
-    console.log('¡Felicidades, la extensión "stylelens" está activa!');
-
-    // --- ¡CAMBIO CLAVE! ---
-    // Inicializamos el set de clases de utilidad al activar la extensión,
-    // pasándole el contexto para que pueda encontrar la ruta del archivo.
+    initializeI18n(context);
     initializeUtilityClassSet(context);
 
     const sidebarProvider = new SidebarProvider(context.extensionUri);
@@ -22,9 +19,9 @@ export function activate(context: vscode.ExtensionContext) {
         { language: 'javascriptreact', scheme: 'file' },
         { language: 'typescriptreact', scheme: 'file' },
         { language: 'vue', scheme: 'file' },
-        { language: 'svelte', scheme: 'file' } 
+        { language: 'svelte', scheme: 'file' }
     ];
-    
+
     context.subscriptions.push(
         vscode.languages.registerCodeLensProvider(selector, new StyleLensProvider())
     );
@@ -32,10 +29,10 @@ export function activate(context: vscode.ExtensionContext) {
     const globalRefactorCommand = vscode.commands.registerCommand(
         'stylelens.executeGlobalRefactor',
         async (utilityClasses: string, newClassName: string, locationsToUpdate: { filePath: string; range: vscode.Range; attributeName: string }[]) => {
-            
+
             const targetCssFileUri = await findTargetCssFile();
             if (!targetCssFileUri) {
-                vscode.window.showErrorMessage('No se encontró un archivo CSS/SCSS global (ej: global.css, index.css).');
+                vscode.window.showErrorMessage(t('error.noGlobalCssFile'));
                 return;
             }
 
@@ -52,8 +49,12 @@ export function activate(context: vscode.ExtensionContext) {
 
             await vscode.workspace.applyEdit(edit);
 
-            vscode.window.showInformationMessage(`Clase .${newClassName} creada y aplicada con éxito en ${locationsToUpdate.length} lugares.`);
-            
+            vscode.window.showInformationMessage(
+                t('info.refactorSuccess')
+                    .replace('{0}', newClassName)
+                    .replace('{1}', locationsToUpdate.length.toString())
+            );
+
             const doc = await vscode.workspace.openTextDocument(targetCssFileUri);
             await vscode.window.showTextDocument(doc);
         }
@@ -73,9 +74,9 @@ export function activate(context: vscode.ExtensionContext) {
         const utilityClasses = match[1];
 
         const newClassName = await vscode.window.showInputBox({
-            prompt: `Introduce un nombre para la nueva clase que reemplazará ${locations.length} ocurrencias.`,
-            placeHolder: 'ej: card-layout, primary-button',
-            validateInput: text => /^[a-z0-9_-]+$/.test(text) ? null : 'Nombre inválido.',
+            prompt: t('prompt.newClassName').replace('{0}', locations.length.toString()),
+            placeHolder: t('placeholder.newClassName'),
+            validateInput: text => /^[a-z0-9_-]+$/.test(text) ? null : t('validation.invalidClassName'),
         });
 
         if (!newClassName) return;
@@ -94,7 +95,7 @@ export function activate(context: vscode.ExtensionContext) {
         const activeEditor = vscode.window.activeTextEditor;
 
         if (!activeEditor) {
-            vscode.window.showWarningMessage('No hay un editor de texto activo.');
+            vscode.window.showWarningMessage(t('warning.noActiveEditor'));
             return;
         }
 
@@ -118,14 +119,14 @@ export function activate(context: vscode.ExtensionContext) {
         outputChannel.clear();
 
         if (duplicates.length > 0) {
-            outputChannel.appendLine(`Análisis de ${document.fileName}:\n`);
-            outputChannel.appendLine('--- Clases/Combinaciones Repetidas ---');
+            outputChannel.appendLine(`${t('output.analysisOf')} ${document.fileName}:\n`);
+            outputChannel.appendLine(`--- ${t('output.repeatedClassesHeader')} ---`);
             duplicates.forEach(([classString, count]) => {
-                outputChannel.appendLine(`[${count} veces] ${classString}`);
+                outputChannel.appendLine(`[${count} ${t('output.times')}] ${classString}`);
             });
         } else {
-            outputChannel.appendLine(`Análisis de ${document.fileName}:`);
-            outputChannel.appendLine('¡Genial! No se encontraron clases duplicadas en este archivo.');
+            outputChannel.appendLine(`${t('output.analysisOf')} ${document.fileName}:`);
+            outputChannel.appendLine(t('output.noDuplicatesFound'));
         }
 
         outputChannel.show();
@@ -134,4 +135,4 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(analyzeCommand);
 }
 
-export function deactivate() {}
+export function deactivate() { }

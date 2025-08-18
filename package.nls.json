@@ -1,0 +1,4 @@
+{
+    "stylelens.view.name": "Style Analysis",
+    "stylelens.command.analyze": "StyleLens: Analyze Repeated Styles in Workspace"
+}

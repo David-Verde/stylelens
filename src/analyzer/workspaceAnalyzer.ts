@@ -33,6 +33,17 @@ export interface WebviewAnalysisReport {
     duplicates: WebviewDuplicateResult[];
     inlineStyleDuplicates: WebviewInlineStyleDuplicateResult[];
     undefinedClasses: WebviewUndefinedClassResult[];
+    duplicateSummary: {
+        critical: number;
+        warning: number;
+        normal: number;
+    };
+    classHeat: {
+        hot: { className: string; count: number }[];
+        warm: { className: string; count: number }[];
+        normal: { className: string; count: number }[];
+    };
+    recommendations: WebviewDuplicateResult[];
 }
 
 let utilityClassesSet: Set<string> = new Set();
@@ -67,6 +78,7 @@ export async function analyzeWorkspaceForWebview(): Promise<WebviewAnalysisRepor
     const usagesByInlineStyle = new Map<string, (InlineStyleUsage & { filePath: string })[]>();
     const allUndefinedClasses: WebviewUndefinedClassResult[] = [];
     const checkedUndefinedClasses = new Set<string>();
+    const individualClassCounts = new Map<string, number>();
 
     for (const file of componentFiles) {
         const document = await vscode.workspace.openTextDocument(file);
@@ -99,6 +111,10 @@ export async function analyzeWorkspaceForWebview(): Promise<WebviewAnalysisRepor
             usagesByClass.get(usage.classString)!.push(usageWithFile);
 
             usage.classString.split(/\s+/).forEach(className => {
+                if (className && !isUtilityClass(className)) {
+                    const count = individualClassCounts.get(className) || 0;
+                    individualClassCounts.set(className, count + 1);
+                }
                 const uniqueKey = `${className}@${relativePath}@${usage.location.start.line}`;
                 if (className && !isUtilityClass(className) && !definedCssClasses.has(className) && !checkedUndefinedClasses.has(uniqueKey)) {
                     allUndefinedClasses.push({ 
@@ -126,20 +142,59 @@ export async function analyzeWorkspaceForWebview(): Promise<WebviewAnalysisRepor
     const duplicateResults: WebviewDuplicateResult[] = [];
     usagesByClass.forEach((locations, classString) => {
         if (locations.length > 1) {
-            duplicateResults.push({ classString, count: locations.length, fullLocations: locations.map(loc => ({ filePath: loc.filePath, location: { start: loc.location.start, end: loc.location.end } })) });
+            duplicateResults.push({ 
+                classString, 
+                count: locations.length, 
+                fullLocations: locations.map(loc => ({ 
+                    filePath: loc.filePath, 
+                    location: { 
+                        start: loc.location.start, 
+                        end: loc.location.end 
+                    } 
+                })) 
+            });
         }
     });
 
     const inlineStyleDuplicateResults: WebviewInlineStyleDuplicateResult[] = [];
     usagesByInlineStyle.forEach((locations, styleString) => {
         if (locations.length > 1) {
-            inlineStyleDuplicateResults.push({ styleString, count: locations.length, fullLocations: locations.map(loc => ({ filePath: loc.filePath, location: { start: loc.location.start, end: loc.location.end } })) });
+            inlineStyleDuplicateResults.push({ 
+                styleString, 
+                count: locations.length, 
+                fullLocations: locations.map(loc => ({ 
+                    filePath: loc.filePath, 
+                    location: { 
+                        start: loc.location.start, 
+                        end: loc.location.end 
+                    } 
+                })) 
+            });
         }
     });
+
+    const duplicateSummary = { critical: 0, warning: 0, normal: 0 };
+    [...duplicateResults, ...inlineStyleDuplicateResults].forEach(item => {
+        if (item.count >= 5) duplicateSummary.critical++;
+        else if (item.count >= 3) duplicateSummary.warning++;
+        else duplicateSummary.normal++;
+    });
+
+    const sortedClasses = Array.from(individualClassCounts.entries()).sort((a, b) => b[1] - a[1]);
+    const classHeat = {
+        hot: sortedClasses.slice(0, 5).map(c => ({ className: c[0], count: c[1] })),
+        warm: sortedClasses.slice(5, 15).map(c => ({ className: c[0], count: c[1] })),
+        normal: sortedClasses.slice(15, 30).map(c => ({ className: c[0], count: c[1] })),
+    };
+    
+    const recommendations = duplicateResults.filter(d => d.count >= 5);
 
     return {
         duplicates: duplicateResults.sort((a, b) => b.count - a.count),
         inlineStyleDuplicates: inlineStyleDuplicateResults.sort((a, b) => b.count - a.count),
-        undefinedClasses: allUndefinedClasses
+        undefinedClasses: allUndefinedClasses,
+        duplicateSummary,
+        classHeat,
+        recommendations
     };
 }
