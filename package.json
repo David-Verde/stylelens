@@ -9,6 +9,7 @@
     "type": "git",
     "url": "https://github.com/David-Verde/stylelens"
   },
+    "license": "GPL-3.0-or-later",
   "engines": {
     "vscode": "^1.102.0"
   },
