@@ -5,6 +5,7 @@
 ### ✨ Added (Nuevas Funcionalidades)
 
 -   **Intelligent Dashboard UI:** The main panel has been completely redesigned into a modern, intuitive dashboard.
+-   **Internationalization Support (i18n):** The extension is now fully translated into Spanish and English, automatically adapting to your VS Code's display language.
 -   **Class Heat Section:** A new "Class Heat" section that provides an at-a-glance heatmap of the most frequently used CSS classes in your project.
 -   **Severity Levels:** Duplicates and class usage are now categorized with severity levels (e.g., Critical, Warning, Minor) for easier prioritization.
 
